@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IBEX Light2 - 생산 교육 및 재고 관리 시스템</title>
+    <meta name="description" content="(주)아이벡스메디칼시스템즈 IBEX Light2 생산 교육 및 재고 관리 웹 애플리케이션">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <button class="mobile-menu-btn" id="mobile-menu-btn">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h1>IBEX</h1>
+            <p style="color: var(--text-color); margin-top: 5px; font-size: 0.9rem;">Light2 Production</p>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#overview" class="nav-link active"><i class="fas fa-home"></i> 제품 개요</a></li>
+            <li><a href="#components" class="nav-link"><i class="fas fa-cubes"></i> 구성 요소</a></li>
+            <li><a href="#process" class="nav-link"><i class="fas fa-cogs"></i> 생산 공정</a></li>
+            <li><a href="#inventory" class="nav-link"><i class="fas fa-boxes"></i> 재고 관리</a></li>
+            <li><a href="#specs" class="nav-link"><i class="fas fa-list-alt"></i> 제품 사양</a></li>
+        </ul>
+        <div class="sidebar-footer">
+            &copy; 2026 (주)아이벡스메디칼시스템즈<br>All rights reserved.
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content" id="main-content">
+        
+        <!-- Hero Section -->
+        <section id="overview">
+            <h1 class="hero-title">IBEX Light2</h1>
+            <div class="hero-subtitle">1인용 고압산소챔버 (Monoplace Hyperbaric Oxygen Chamber)</div>
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-value">2 ATA</div>
+                    <div class="stat-label">허용 작동압력</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">~250kg</div>
+                    <div class="stat-label">경량화 설계</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">800×2130mm</div>
+                    <div class="stat-label">넓이 × 길이</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">2분 이내</div>
+                    <div class="stat-label">비상배기 시간</div>
+                </div>
+            </div>
+            <p style="max-width: 640px; line-height: 1.8; margin-bottom: 36px; color: var(--text-secondary); font-size: 1.05rem;">
+                가벼운 의료용 고압산소챔버. 직관적이고 쉬운 컨트롤패널과 고농도(고순도)의 산소를 전달하는 첨단 설계.<br>
+                <span style="color: var(--text-muted); font-size: 0.88rem;">반투명 슬라이딩 도어 / 경량화 고압산소챔버 / 1인 시술 전용</span>
+            </p>
+            <a href="https://ibex.co.kr/kr/product/mono/ibex-light/" target="_blank" class="btn-primary"><i class="fas fa-external-link-alt"></i> 아이벡스 제품 페이지 방문</a>
+        </section>
+
+        <!-- Components Section -->
+        <section id="components">
+            <h2 class="section-title">주요 구성 요소</h2>
+            <p class="section-desc">IBEX Light2 생산을 위한 5가지 핵심 모듈입니다. 인터랙티브 뷰를 통해 각 부품의 역할과 사양을 확인하세요.</p>
+            
+            <div class="exploded-view-container" title="Exploded View">
+                <!-- Exploded view image is set as background -->
+            </div>
+
+            <div class="components-grid" id="components-grid">
+                <!-- Rendered by JS -->
+            </div>
+        </section>
+
+        <!-- Component Modal -->
+        <div class="modal-overlay" id="component-modal">
+            <div class="modal-content">
+                <button class="modal-close" id="modal-close">&times;</button>
+                <div class="modal-body" id="modal-body">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Process Section -->
+        <section id="process">
+            <h2 class="section-title">생산 공정 (Production Process)</h2>
+            <p class="section-desc">완벽한 품질을 위한 7단계 조립 및 검수 공정입니다.</p>
+            
+            <div class="timeline" id="timeline">
+                <!-- Populated by JS -->
+            </div>
+
+            <!-- Quiz -->
+            <div class="quiz-container" id="quiz-container">
+                <h3 style="margin-top:0; color:var(--primary-color);"><i class="fas fa-question-circle"></i> 공정 이해도 체크</h3>
+                <div id="quiz-content">
+                    <!-- Populated by JS -->
+                </div>
+                <button id="quiz-next-btn" class="btn-action" style="margin-top: 20px; display: none;">다음 문제</button>
+            </div>
+        </section>
+
+        <!-- Inventory Section -->
+        <section id="inventory">
+            <h2 class="section-title">재고 관리 (Inventory Management)</h2>
+            <p class="section-desc">실시간 부품 재고 현황을 모니터링하고 입출고 내역을 관리합니다.</p>
+            
+            <div class="dashboard-header">
+                <div class="dash-card">
+                    <div class="dash-value" id="total-parts">0</div>
+                    <div class="stat-label">총 등록 부품 (Total Parts)</div>
+                </div>
+                <div class="dash-card">
+                    <div class="dash-value" style="color: var(--danger-color);" id="low-stock-alert">0</div>
+                    <div class="stat-label">재고 부족 경고 (Low Stock)</div>
+                </div>
+                <div class="dash-card">
+                    <div class="dash-value" style="color: var(--success-color);" id="total-stock">0</div>
+                    <div class="stat-label">전체 재고 수량 (Total Qty)</div>
+                </div>
+            </div>
+
+            <div class="inventory-list" id="inventory-list">
+                <!-- Populated by JS -->
+            </div>
+
+            <div class="inventory-controls">
+                <h3 style="margin-top:0;">재고 입/출고 관리</h3>
+                <form id="inventory-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="part-select" style="display:block; margin-bottom:5px; color:#aaa;">부품 선택</label>
+                            <select id="part-select" class="form-control" required>
+                                <!-- Populated by JS -->
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="transaction-type" style="display:block; margin-bottom:5px; color:#aaa;">구분</label>
+                            <select id="transaction-type" class="form-control" required>
+                                <option value="add">입고 (+)</option>
+                                <option value="remove">출고 (-)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="quantity" style="display:block; margin-bottom:5px; color:#aaa;">수량</label>
+                            <input type="number" id="quantity" class="form-control" min="1" required>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn-action">적용하기</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 40px; margin-bottom: 20px;">
+                <h3 style="margin:0;">최근 입출고 내역</h3>
+                <button id="export-csv" class="btn-action" style="background-color: var(--secondary-color); color: #fff; border: 1px solid #444;"><i class="fas fa-download"></i> CSV 다운로드</button>
+            </div>
+            
+            <div style="overflow-x: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>일시</th>
+                            <th>부품명</th>
+                            <th>구분</th>
+                            <th>수량</th>
+                            <th>비고</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transaction-log">
+                        <!-- Populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Specs Section -->
+        <section id="specs">
+            <h2 class="section-title">제품 사양 (Specifications)</h2>
+            <table class="specs-table">
+                <tbody>
+                    <tr>
+                        <th>제품명</th>
+                        <td>IBEX Light2</td>
+                    </tr>
+                    <tr>
+                        <th>유형</th>
+                        <td>1인용 고압산소챔버 (Monoplace Hyperbaric Oxygen Chamber)</td>
+                    </tr>
+                    <tr>
+                        <th>운영 압력</th>
+                        <td>최대 2 ATA</td>
+                    </tr>
+                    <tr>
+                        <th>무게</th>
+                        <td>약 250 kg (경량화 설계)</td>
+                    </tr>
+                    <tr>
+                        <th>크기 (W x L x H)</th>
+                        <td>800 mm x 2130 mm x 1190 mm</td>
+                    </tr>
+                    <tr>
+                        <th>안전 기능</th>
+                        <td>2분 이내 비상 배기 시스템, 압력 릴리프 밸브, 비상 정지</td>
+                    </tr>
+                    <tr>
+                        <th>주요 특징</th>
+                        <td>반투명 슬라이딩 도어, 직관적 컨트롤 패널, 고순도 산소 전달</td>
+                    </tr>
+                    <tr>
+                        <th>제조사</th>
+                        <td>(주)아이벡스메디칼시스템즈</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+    </main>
+
+    <script>
+        // Data Definitions
+        const componentsData = [
+            {
+                id: 'bottom_frame',
+                name: '하단 프레임 (Bottom Frame)',
+                desc: '제품의 기초 골격, 내구성과 안정성 확보, 바닥 고정 및 수평 조절 기능',
+                img: './images/bottom_frame.jpg',
+                specs: '고강도 알루미늄/스틸 프레임, 방진 마운트 적용',
+                checkpoints: '용접부 비파괴 검사, 수평도 0.5도 이내 확인',
+                precautions: '하중 분산을 위한 수평 조절 나사 정밀 세팅 필요'
+            },
+            {
+                id: 'front_panel',
+                name: '앞기판 (Front Panel)',
+                desc: '환자 진입부, 시야 확보용 투명창, 기밀 씰링 가스켓 장착',
+                img: './images/front_panel.jpg',
+                specs: '의료용 강화 아크릴, 실리콘 기밀 씰링',
+                checkpoints: '가스켓 밀착 상태, 투명창 스크래치 여부',
+                precautions: '조립 시 실리콘 가스켓에 이물질 유입 주의'
+            },
+            {
+                id: 'back_panel',
+                name: '뒷기판 (Back Panel)',
+                desc: '배관 연결부, 산소 공급 밸브, 압력 릴리프 밸브, 전기 커넥터',
+                img: './images/back_panel.jpg',
+                specs: '내압 방폭 설계, 통합 배관 인터페이스',
+                checkpoints: '밸브 체결 토크 확인, 리크(Leak) 테스트 통과',
+                precautions: '산소 라인 오염 방지를 위한 무급유(Oil-free) 조립'
+            },
+            {
+                id: 'chamber',
+                name: '챔버 (Chamber)',
+                desc: '투명 아크릴 실린더 본체, 2ATA 내압 설계, 환자 수용 공간',
+                img: './images/chamber_body.jpg',
+                specs: '원통형 투명 아크릴, 작동압력 2 ATA (최대 내압 테스트 완료)',
+                checkpoints: '아크릴 본체 크랙 및 기포 육안 검사, 투과율 확인',
+                precautions: '조립 중 충격 금지, 전용 지그(Jig) 사용 필수'
+            },
+            {
+                id: 'control_door',
+                name: '컨트롤도어 (Control Door)',
+                desc: '반투명 슬라이딩 도어, 디지털 컨트롤 패널, 압력 게이지, 비상 정지 기능',
+                img: './images/control_door.jpg',
+                specs: '인체공학적 슬라이딩 메커니즘, 터치스크린 패널 내장',
+                checkpoints: '도어 개폐 부드러움, 비상 배기 2분 내 작동 여부',
+                precautions: '디지털 패널 케이블 단선 주의, 레일 정렬 확인'
+            }
+        ];
+
+        const processData = [
+            { title: '자재 검수', eng: 'Material Inspection', desc: '입고된 부품 및 원자재의 품질 검사', time: '2h', icon: 'fa-clipboard-check' },
+            { title: '하단 프레임 조립', eng: 'Bottom Frame Assembly', desc: '베이스 프레임 용접 및 표면 처리', time: '4h', icon: 'fa-wrench' },
+            { title: '챔버 본체 장착', eng: 'Chamber Body Mounting', desc: '아크릴 챔버를 프레임에 고정', time: '3h', icon: 'fa-compress-arrows-alt' },
+            { title: '앞/뒷기판 결합', eng: 'Front/Back Panel Integration', desc: '기판 장착 및 기밀 테스트', time: '5h', icon: 'fa-plug' },
+            { title: '컨트롤도어 설치', eng: 'Control Door Installation', desc: '슬라이딩 도어 및 제어 패널 설치', time: '2h', icon: 'fa-door-open' },
+            { title: '배관/전장 연결', eng: 'Piping & Electrical Connection', desc: '산소 배관, 전기 배선 연결', time: '6h', icon: 'fa-bolt' },
+            { title: '최종 검사 및 테스트', eng: 'Final Inspection & Testing', desc: '가압 테스트, 안전 검사, 품질 인증', time: '8h', icon: 'fa-check-circle' }
+        ];
+
+        const quizQuestions = [
+            { q: "하단 프레임(Bottom Frame)의 주요 역할이 아닌 것은?", options: ["제품의 기초 골격", "내구성과 안정성 확보", "투명 시야 확보", "수평 조절 기능"], a: 2 },
+            { q: "배관 연결부, 산소 공급 밸브, 압력 릴리프 밸브가 장착되는 구성 요소는?", options: ["앞기판", "뒷기판", "컨트롤도어", "하단 프레임"], a: 1 },
+            { q: "IBEX Light2 챔버의 최대 작동 압력은?", options: ["1.5 ATA", "2 ATA", "2.5 ATA", "3 ATA"], a: 1 },
+            { q: "안전 규정상 비상 배기 시스템은 몇 분 이내에 작동해야 하는가?", options: ["1분 이내", "2분 이내", "3분 이내", "5분 이내"], a: 1 },
+            { q: "생산 공정 중 가장 마지막에 진행되는 단계는?", options: ["자재 검수", "배관/전장 연결", "최종 검사 및 테스트", "컨트롤도어 설치"], a: 2 }
+        ];
+
+        // Initialization
+        document.addEventListener('DOMContentLoaded', () => {
+            initNavigation();
+            initComponents();
+            initProcess();
+            initQuiz();
+            initInventory();
+            initScrollAnimations();
+        });
+
+        // 1. Navigation & Mobile Menu
+        function initNavigation() {
+            const menuBtn = document.getElementById('mobile-menu-btn');
+            const sidebar = document.getElementById('sidebar');
+            const navLinks = document.querySelectorAll('.nav-link');
+            const mainContent = document.getElementById('main-content');
+
+            menuBtn.addEventListener('click', () => {
+                sidebar.classList.toggle('active');
+            });
+
+            // Smooth scroll to section within main-content
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetId = link.getAttribute('href').substring(1);
+                    const targetEl = document.getElementById(targetId);
+                    if (targetEl) {
+                        mainContent.scrollTo({
+                            top: targetEl.offsetTop,
+                            behavior: 'smooth'
+                        });
+                    }
+                    if (window.innerWidth <= 768) {
+                        sidebar.classList.remove('active');
+                    }
+                });
+            });
+
+            // Update active nav based on scroll position in main-content
+            const sections = document.querySelectorAll('section');
+            mainContent.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.clientHeight;
+                    if (mainContent.scrollTop >= (sectionTop - sectionHeight / 3)) {
+                        current = section.getAttribute('id');
+                    }
+                });
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').includes(current)) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+        }
+
+        // 2. Components Section
+        function initComponents() {
+            const grid = document.getElementById('components-grid');
+            const modal = document.getElementById('component-modal');
+            const modalClose = document.getElementById('modal-close');
+            const modalBody = document.getElementById('modal-body');
+
+            componentsData.forEach(comp => {
+                const card = document.createElement('div');
+                card.className = 'component-card';
+                card.innerHTML = `
+                    <div class="component-img-container">
+                        <img src="${comp.img}" alt="${comp.name}" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'100\\' height=\\'100\\'><rect width=\\'100\\' height=\\'100\\' fill=\\'%23333\\'/><text x=\\'50\\' y=\\'50\\' fill=\\'%23fff\\' font-family=\\'sans-serif\\' font-size=\\'14\\' text-anchor=\\'middle\\' alignment-baseline=\\'middle\\'>Image</text></svg>'">
+                    </div>
+                    <div class="component-info">
+                        <h3 class="component-title">${comp.name}</h3>
+                        <p class="component-desc">${comp.desc}</p>
+                    </div>
+                `;
+                
+                card.addEventListener('click', () => {
+                    modalBody.innerHTML = `
+                        <div class="modal-img">
+                            <img src="${comp.img}" alt="${comp.name}" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'100\\' height=\\'100\\'><rect width=\\'100\\' height=\\'100\\' fill=\\'%23333\\'/><text x=\\'50\\' y=\\'50\\' fill=\\'%23fff\\' font-family=\\'sans-serif\\' font-size=\\'14\\' text-anchor=\\'middle\\' alignment-baseline=\\'middle\\'>Image</text></svg>'">
+                        </div>
+                        <div class="modal-text">
+                            <h2 class="modal-title">${comp.name}</h2>
+                            <p>${comp.desc}</p>
+                            <hr style="border-color: var(--secondary-color); margin: 20px 0;">
+                            <h4 style="color:var(--primary-color);">자재 사양 (Material Specs)</h4>
+                            <p>${comp.specs}</p>
+                            <h4 style="color:var(--primary-color);">품질 체크포인트 (Quality Checkpoints)</h4>
+                            <p>${comp.checkpoints}</p>
+                            <h4 style="color:var(--primary-color);">조립 주의사항 (Assembly Precautions)</h4>
+                            <p>${comp.precautions}</p>
+                        </div>
+                    `;
+                    modal.classList.add('active');
+                });
+                grid.appendChild(card);
+            });
+
+            modalClose.addEventListener('click', () => {
+                modal.classList.remove('active');
+            });
+            modal.addEventListener('click', (e) => {
+                if(e.target === modal) modal.classList.remove('active');
+            });
+        }
+
+        // 3. Process Section
+        function initProcess() {
+            const timeline = document.getElementById('timeline');
+            processData.forEach((step, index) => {
+                const item = document.createElement('div');
+                item.className = 'timeline-item';
+                item.innerHTML = `
+                    <div class="timeline-content">
+                        <h3><i class="fas ${step.icon}"></i> ${index + 1}. ${step.title}</h3>
+                        <p style="color: #aaa; margin-bottom: 5px; font-size: 0.9rem;">${step.eng} (예상 소요: ${step.time})</p>
+                        <p>${step.desc}</p>
+                    </div>
+                `;
+                timeline.appendChild(item);
+            });
+        }
+
+        // Scroll Animation (Intersection Observer)
+        function initScrollAnimations() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, { threshold: 0.2 });
+
+            document.querySelectorAll('.timeline-item').forEach(item => {
+                observer.observe(item);
+            });
+        }
+
+        // 4. Quiz
+        let currentQuestion = 0;
+        function initQuiz() {
+            renderQuestion();
+            document.getElementById('quiz-next-btn').addEventListener('click', () => {
+                currentQuestion++;
+                if(currentQuestion < quizQuestions.length) {
+                    renderQuestion();
+                    document.getElementById('quiz-next-btn').style.display = 'none';
+                } else {
+                    document.getElementById('quiz-content').innerHTML = `
+                        <div style="text-align:center; padding: 20px;">
+                            <i class="fas fa-check-circle" style="font-size: 3rem; color: var(--success-color); margin-bottom:20px;"></i>
+                            <h3>교육을 완료했습니다!</h3>
+                            <p>모든 프로세스를 성공적으로 학습했습니다.</p>
+                            <button class="btn-action" onclick="currentQuestion=0; renderQuestion();">다시 풀기</button>
+                        </div>
+                    `;
+                    document.getElementById('quiz-next-btn').style.display = 'none';
+                }
+            });
+        }
+
+        function renderQuestion() {
+            const q = quizQuestions[currentQuestion];
+            const content = document.getElementById('quiz-content');
+            let html = `<div class="quiz-question">Q${currentQuestion + 1}. ${q.q}</div><div class="quiz-options">`;
+            q.options.forEach((opt, idx) => {
+                html += `<div class="quiz-option" data-idx="${idx}">${opt}</div>`;
+            });
+            html += `</div>`;
+            content.innerHTML = html;
+
+            const options = document.querySelectorAll('.quiz-option');
+            options.forEach(opt => {
+                opt.addEventListener('click', function() {
+                    if(document.querySelector('.quiz-option.correct')) return; // already answered
+                    
+                    const selectedIdx = parseInt(this.getAttribute('data-idx'));
+                    if(selectedIdx === q.a) {
+                        this.classList.add('correct');
+                        this.innerHTML += ' <i class="fas fa-check" style="float:right;"></i>';
+                    } else {
+                        this.classList.add('wrong');
+                        this.innerHTML += ' <i class="fas fa-times" style="float:right;"></i>';
+                        options[q.a].classList.add('correct');
+                    }
+                    document.getElementById('quiz-next-btn').style.display = 'inline-block';
+                });
+            });
+        }
+
+        // 5. Inventory Management
+        let inventoryData = [];
+        let transactionLogs = [];
+
+        function initInventory() {
+            // Load from LocalStorage
+            const storedInv = localStorage.getItem('ibex_inventory');
+            const storedLogs = localStorage.getItem('ibex_logs');
+
+            if (storedInv) {
+                inventoryData = JSON.parse(storedInv);
+            } else {
+                // Initial Default Data
+                inventoryData = componentsData.map(c => ({
+                    id: c.id,
+                    name: c.name,
+                    img: c.img,
+                    stock: Math.floor(Math.random() * 80) + 10, // Random 10~90
+                    minStock: 20,
+                    maxStock: 100,
+                    lastUpdated: new Date().toISOString()
+                }));
+                saveInventory();
+            }
+
+            if (storedLogs) {
+                transactionLogs = JSON.parse(storedLogs);
+            }
+
+            renderInventory();
+            populateSelect();
+            updateDashboard();
+            renderLogs();
+
+            // Form Submit
+            document.getElementById('inventory-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const partId = document.getElementById('part-select').value;
+                const type = document.getElementById('transaction-type').value;
+                const qty = parseInt(document.getElementById('quantity').value);
+
+                handleTransaction(partId, type, qty);
+                e.target.reset();
+            });
+
+            // CSV Export
+            document.getElementById('export-csv').addEventListener('click', exportCSV);
+        }
+
+        function saveInventory() {
+            localStorage.setItem('ibex_inventory', JSON.stringify(inventoryData));
+            localStorage.setItem('ibex_logs', JSON.stringify(transactionLogs));
+        }
+
+        function getStatusInfo(stock, min) {
+            if (stock > 50) return { class: 'status-green', text: '정상' };
+            if (stock >= 20) return { class: 'status-yellow', text: '주의' };
+            return { class: 'status-red', text: '부족' };
+        }
+
+        function animateValue(obj, start, end, duration) {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                obj.innerHTML = Math.floor(progress * (end - start) + start);
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        function renderInventory() {
+            const list = document.getElementById('inventory-list');
+            list.innerHTML = '';
+            
+            inventoryData.forEach(item => {
+                const status = getStatusInfo(item.stock, item.minStock);
+                const dateStr = new Date(item.lastUpdated).toLocaleDateString('ko-KR');
+                
+                const card = document.createElement('div');
+                card.className = 'inventory-item';
+                card.innerHTML = `
+                    <img src="${item.img}" alt="${item.name}" onerror="this.style.display='none'">
+                    <h4 style="margin:0 0 10px 0; font-size:1.1rem; color:#fff;">${item.name}</h4>
+                    <div class="stock-level">
+                        <span class="status-dot ${status.class}"></span>
+                        <span class="counter" data-target="${item.stock}">${item.stock}</span> 개
+                    </div>
+                    <div style="font-size:0.8rem; color:#aaa; margin-top:10px;">
+                        기준치: Min ${item.minStock} / Max ${item.maxStock}<br>
+                        최근 업데이트: ${dateStr}
+                    </div>
+                `;
+                list.appendChild(card);
+
+                // Counter animation
+                const counterEl = card.querySelector('.counter');
+                animateValue(counterEl, 0, item.stock, 1000);
+            });
+        }
+
+        function updateDashboard() {
+            const totalParts = inventoryData.length;
+            const totalStock = inventoryData.reduce((sum, item) => sum + item.stock, 0);
+            const lowStockCount = inventoryData.filter(item => item.stock < item.minStock).length;
+
+            animateValue(document.getElementById('total-parts'), 0, totalParts, 500);
+            animateValue(document.getElementById('total-stock'), 0, totalStock, 1000);
+            animateValue(document.getElementById('low-stock-alert'), 0, lowStockCount, 500);
+        }
+
+        function populateSelect() {
+            const select = document.getElementById('part-select');
+            select.innerHTML = '<option value="">-- 부품을 선택하세요 --</option>';
+            inventoryData.forEach(item => {
+                select.innerHTML += `<option value="${item.id}">${item.name}</option>`;
+            });
+        }
+
+        function handleTransaction(partId, type, qty) {
+            const item = inventoryData.find(i => i.id === partId);
+            if (!item) return;
+
+            if (type === 'remove' && item.stock < qty) {
+                alert('재고가 부족합니다!');
+                return;
+            }
+
+            // Update Stock
+            if (type === 'add') {
+                item.stock += qty;
+            } else {
+                item.stock -= qty;
+            }
+            item.lastUpdated = new Date().toISOString();
+
+            // Add Log
+            transactionLogs.unshift({
+                date: new Date().toISOString(),
+                partId: item.id,
+                partName: item.name,
+                type: type,
+                qty: qty,
+                remark: type === 'add' ? '입고 처리' : '생산 출고'
+            });
+
+            // Keep only last 50 logs
+            if (transactionLogs.length > 50) transactionLogs.pop();
+
+            saveInventory();
+            renderInventory();
+            updateDashboard();
+            renderLogs();
+        }
+
+        function renderLogs() {
+            const tbody = document.getElementById('transaction-log');
+            tbody.innerHTML = '';
+            
+            if (transactionLogs.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:#aaa;">내역이 없습니다.</td></tr>';
+                return;
+            }
+
+            transactionLogs.forEach(log => {
+                const tr = document.createElement('tr');
+                const dateStr = new Date(log.date).toLocaleString('ko-KR');
+                const typeStr = log.type === 'add' ? '<span style="color:var(--success-color);">입고 (+)</span>' : '<span style="color:var(--warning-color);">출고 (-)</span>';
+                
+                tr.innerHTML = `
+                    <td>${dateStr}</td>
+                    <td>${log.partName}</td>
+                    <td>${typeStr}</td>
+                    <td>${log.qty}</td>
+                    <td>${log.remark}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function exportCSV() {
+            if (transactionLogs.length === 0) {
+                alert('내보낼 데이터가 없습니다.');
+                return;
+            }
+
+            let csvContent = "data:text/csv;charset=utf-8,\uFEFF"; // BOM for Korean characters in Excel
+            csvContent += "일시,부품명,구분,수량,비고\n";
+
+            transactionLogs.forEach(log => {
+                const dateStr = new Date(log.date).toLocaleString('ko-KR').replace(/,/g, '');
+                const typeStr = log.type === 'add' ? '입고' : '출고';
+                const row = `"${dateStr}","${log.partName}","${typeStr}",${log.qty},"${log.remark}"`;
+                csvContent += row + "\n";
+            });
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "ibex_inventory_logs.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+</body>
+</html>
