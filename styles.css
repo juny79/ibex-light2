@@ -310,7 +310,7 @@ section {
 
 /* ── Hero Section ── */
 #overview {
-    background: var(--gradient-hero), url('./images/hero_banner.jpg') center/cover;
+    background: var(--gradient-hero), url('./images/hero_banner.png') center/cover;
     display: flex;
     flex-direction: column;
     justify-content: center;
