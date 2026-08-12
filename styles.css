@@ -923,6 +923,136 @@ section {
     margin: 20px 0;
 }
 
+/* ── Assembly Simulation Dashboard ── */
+.simulation-dashboard {
+    max-width: 780px;
+    margin: 0 auto 30px auto;
+    background: var(--bg-card);
+    border: 1px solid var(--border-default);
+    border-radius: var(--card-radius);
+    padding: 24px;
+    box-shadow: var(--shadow-md);
+}
+
+.sim-progress-box {
+    margin-bottom: 20px;
+}
+
+.sim-progress-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.95rem;
+    color: var(--text-primary);
+}
+
+.sim-status-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
+
+.sim-status-card {
+    background: rgba(0, 0, 0, 0.02);
+    border: 1px solid var(--border-default);
+    border-radius: 12px;
+    padding: 14px 10px;
+    text-align: center;
+    transition: all var(--transition-normal);
+}
+
+.sim-status-card.active-step {
+    border-color: var(--ibex-accent);
+    box-shadow: 0 0 10px rgba(30, 144, 255, 0.1);
+    background: rgba(30, 144, 255, 0.03);
+}
+
+.sim-status-card.completed-step {
+    border-color: var(--status-green);
+    background: rgba(16, 185, 129, 0.02);
+}
+
+.sim-status-card .status-icon {
+    font-size: 1.5rem;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+    transition: color 0.3s;
+}
+
+.sim-status-card.active-step .status-icon {
+    color: var(--ibex-accent);
+}
+
+.sim-status-card.completed-step .status-icon {
+    color: var(--status-green);
+}
+
+.sim-status-card .status-name {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+}
+
+.sim-status-card .status-badge {
+    display: inline-block;
+    font-size: 0.72rem;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-weight: bold;
+}
+
+.state-pending {
+    background: rgba(0, 0, 0, 0.05);
+    color: var(--text-muted);
+}
+
+.state-active {
+    background: rgba(30, 144, 255, 0.1);
+    color: var(--ibex-accent);
+    border: 1px solid rgba(30, 144, 255, 0.2);
+}
+
+.state-completed {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--status-green);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+/* Simulated progress bar animation */
+.sim-step-progress-inline {
+    background: rgba(0, 0, 0, 0.05);
+    height: 6px;
+    border-radius: 3px;
+    margin-top: 12px;
+    overflow: hidden;
+    display: none;
+}
+
+.sim-step-progress-fill {
+    background: var(--gradient-primary);
+    width: 0%;
+    height: 100%;
+    transition: width 0.1s linear;
+}
+
+.step-instruction-list {
+    margin-top: 10px;
+    padding-left: 20px;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+
+.step-instruction-list li {
+    margin-bottom: 4px;
+}
+
+@media (max-width: 768px) {
+    .sim-status-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
 /* ── Process Timeline ── */
 .timeline {
     position: relative;

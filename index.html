@@ -141,9 +141,44 @@
 
         <!-- Process Section -->
         <section id="process">
-            <h2 class="section-title">생산 조립 공정 (Assembly Simulation)</h2>
-            <p class="section-desc">완벽한 품질을 위한 7단계 조립 및 검수 공정입니다. 각 단계별로 소요되는 실제 자재를 재고 시스템과 연동하여 조립 실습을 진행할 수 있습니다.</p>
+            <h2 class="section-title">생산 조립 공정 & 시뮬레이션 (Assembly & Simulation)</h2>
+            <p class="section-desc">IBEX Light2 제품이 어떻게 조립되고 완제품으로 빌드되는지 단계별 가상 조립 시뮬레이션으로 학습합니다.</p>
             
+            <!-- Overall Progress Display -->
+            <div class="simulation-dashboard">
+                <div class="sim-progress-box">
+                    <div class="sim-progress-header">
+                        <strong>현재 조립 진척도 (Assembly Progress)</strong>
+                        <span id="sim-progress-text" style="font-weight: 800; color: var(--ibex-accent);">0%</span>
+                    </div>
+                    <div class="sim-progress-bar-container" style="background: var(--border-default); border-radius: 10px; height: 12px; margin-top: 10px; overflow: hidden; position: relative;">
+                        <div class="sim-progress-bar" id="sim-progress-bar" style="width: 0%; height: 100%; background: var(--gradient-primary); transition: width 0.5s ease;"></div>
+                    </div>
+                </div>
+                <div class="sim-status-grid">
+                    <div class="sim-status-card" id="status-card-bottom_frame">
+                        <div class="status-icon"><i class="fas fa-border-all"></i></div>
+                        <div class="status-name">하단 프레임</div>
+                        <span class="status-badge state-pending" id="badge-bottom_frame">조립 대기</span>
+                    </div>
+                    <div class="sim-status-card" id="status-card-chamber">
+                        <div class="status-icon"><i class="fas fa-circle-notch"></i></div>
+                        <div class="status-name">아크릴 챔버</div>
+                        <span class="status-badge state-pending" id="badge-chamber">조립 대기</span>
+                    </div>
+                    <div class="sim-status-card" id="status-card-panels">
+                        <div class="status-icon"><i class="fas fa-columns"></i></div>
+                        <div class="status-name">앞/뒷기판</div>
+                        <span class="status-badge state-pending" id="badge-panels">조립 대기</span>
+                    </div>
+                    <div class="sim-status-card" id="status-card-control_door">
+                        <div class="status-icon"><i class="fas fa-door-open"></i></div>
+                        <div class="status-name">컨트롤 도어</div>
+                        <span class="status-badge state-pending" id="badge-control_door">조립 대기</span>
+                    </div>
+                </div>
+            </div>
+
             <div class="timeline" id="timeline">
                 <!-- Populated by JS -->
             </div>
@@ -470,93 +505,258 @@
         }
 
         // 3. Process Section
+        let currentSimStep = 0; // Tracks assembly simulation progress (0 to 7)
+
+        const stepInstructions = {
+            0: [
+                "1. 각 부품(하단 프레임, 챔버, 앞/뒷기판, 도어)의 도장 상태 및 외관 스크래치 육안 검사",
+                "2. 아크릴 챔버의 투명도 검사 및 미세 크랙 존재 여부 체크",
+                "3. 수입검사성적서(IQC) 문서 작성 및 합격 부품 태그 부착"
+            ],
+            1: [
+                "1. 스틸 프레임 베이스를 작업대에 안착 및 수평계 활용 정렬",
+                "2. 하부 4개소에 고하중 우레탄 캐스터(바퀴) 볼트 체결 및 고정",
+                "3. 전면 하단부 메인 전원 스위치 및 내부 전원 공급 장치(SMPS) 고정"
+            ],
+            2: [
+                "1. 프레임 상단 챔버 안착부에 방진용 완충 고무 실링 가이드 도포",
+                "2. 2 ATA 압력 설계용 특수 아크릴 실린더 챔버를 크레인으로 하단 프레임에 수평 안착",
+                "3. 챔버 고정용 밴드 조임 작업 및 측면 보조 스테인리스 핸들 체결"
+            ],
+            3: [
+                "1. 앞기판(ibex 메디칼시스템즈 로고 인쇄면) 조립 가이드에 밀착 가조립",
+                "2. 특수 실리콘 기밀 가스켓(씰링)을 도포하여 압력 누출 절대 방지",
+                "3. 뒷기판의 산소 공급 라인, 압력 게이지, 과압 방지용 릴리프 밸브 체결 후 정밀 볼팅"
+            ],
+            4: [
+                "1. 도어 슬라이딩 정밀 롤러 레일 브래킷 정렬 및 오일 도포",
+                "2. 반투명 슬라이딩 도어 정렬 후 원활한 슬라이딩 구동 성능 확인",
+                "3. 도어 컨트롤용 터치스크린 패널 및 대형 외부 모니터용 다관절 암(Arm) 볼팅 결합"
+            ],
+            5: [
+                "1. 구리 배관 및 고압 산소 호스 유량 제어기 밸브 단단히 고정 연결",
+                "2. 제어 보드 배선 및 모니터 전원/HDMI 케이블 노이즈 방지용 페라이트 코어 장착",
+                "3. 케이블 하네스를 플렉시블 튜브 및 타이로 정렬하여 가동부 간섭 방지"
+            ],
+            6: [
+                "1. 챔버 내부에 테스트 압력 2 ATA까지 단계적 질소/산소 가압",
+                "2. 20분간 압력 게이지 강하 여부 체크 및 비눗물 테스트로 리크(Leak) 유무 정밀 판정",
+                "3. 비상 배기 밸브 구동 검사 (비상 정지 시 2분 이내 대기압 강하 속도 측정 및 합격 판정)"
+            ]
+        };
+
         function initProcess() {
             const timeline = document.getElementById('timeline');
-            timeline.innerHTML = ''; // Clear prior if any
+            timeline.innerHTML = ''; // Clear prior
+            
             processData.forEach((step, index) => {
                 const item = document.createElement('div');
-                item.className = 'timeline-item';
+                item.className = `timeline-item ${index <= currentSimStep ? 'active' : ''}`;
                 
+                let actionBtnHtml = '';
+                let statusTextHtml = '';
+                
+                if (index < currentSimStep) {
+                    statusTextHtml = `<span style="color:var(--status-green); font-weight:bold; font-size:0.85rem;"><i class="fas fa-check-circle"></i> 조립 완료</span>`;
+                    actionBtnHtml = `<button class="btn-action" style="margin-top:10px; font-size:0.85rem; padding: 6px 14px; background:var(--status-green); border:none; color:#fff;" disabled><i class="fas fa-check"></i> 공정 이수 완료</button>`;
+                } else if (index === currentSimStep) {
+                    statusTextHtml = `<span style="color:var(--ibex-accent); font-weight:bold; font-size:0.85rem; animation: pulse 2s infinite;"><i class="fas fa-tools"></i> 조립 진행 중</span>`;
+                    actionBtnHtml = `<button class="btn-action" style="margin-top:10px; font-size:0.85rem; padding: 6px 14px; background:var(--ibex-accent); color:#fff;" onclick="startStepSimulation(${index})">조립 실습 시작하기</button>`;
+                } else {
+                    statusTextHtml = `<span style="color:var(--text-muted); font-size:0.85rem;"><i class="fas fa-lock"></i> 이전 단계 대기</span>`;
+                    actionBtnHtml = `<button class="btn-action" style="margin-top:10px; font-size:0.85rem; padding: 6px 14px; background:rgba(0,0,0,0.05); color:var(--text-muted); border:1px solid var(--border-default);" disabled>조립 대기</button>`;
+                }
+
+                // Components used in this step
                 let partsHtml = '';
                 if (step.requiredParts && step.requiredParts.length > 0) {
-                    partsHtml = `<div class="required-materials-box">
-                        <strong>🛠️ 필요 소요 자재:</strong><br>
-                        ${step.requiredParts.map(p => {
-                            const currentItem = inventoryData.find(inv => inv.id === p.id);
-                            const currentStock = currentItem ? currentItem.stock : 0;
-                            const isEnough = currentStock >= p.qty;
-                            const stockStatusText = isEnough ? `(보유: ${currentStock}개)` : `(<span style="color:var(--status-red); font-weight:bold;">재고부족: ${currentStock}개</span>)`;
-                            return `- ${p.name} ${p.qty}개 ${stockStatusText}`;
-                        }).join('<br>')}
-                        <button class="btn-action" style="margin-top:10px; font-size:0.85rem; padding: 6px 14px;" onclick="simulateAssembly(${index})">조립 실습 실행 (자재 차감)</button>
+                    partsHtml = `<div class="required-materials-box" style="margin-bottom:12px; background: rgba(30,144,255,0.02);">
+                        <strong>🧩 소요 조립 부품:</strong> ${step.requiredParts.map(p => `${p.name} ${p.qty}개`).join(', ')}
                     </div>`;
                 }
 
+                // Sub-step instructions
+                let instructionsHtml = '';
+                if (stepInstructions[index]) {
+                    instructionsHtml = `
+                        <ul class="step-instruction-list">
+                            ${stepInstructions[index].map(inst => `<li>${inst}</li>`).join('')}
+                        </ul>
+                    `;
+                }
+
                 item.innerHTML = `
-                    <div class="timeline-content">
-                        <h3><i class="fas ${step.icon}"></i> ${index + 1}. ${step.title}</h3>
-                        <p style="color: var(--text-muted); margin-bottom: 5px; font-size: 0.9rem;">${step.eng} (예상 소요: ${step.time})</p>
+                    <div class="timeline-content" id="timeline-content-${index}">
+                        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:10px;">
+                            <h3 style="margin:0;"><i class="fas ${step.icon}"></i> ${index + 1}. ${step.title}</h3>
+                            ${statusTextHtml}
+                        </div>
+                        <p style="color: var(--text-muted); margin-bottom: 10px; font-size: 0.88rem;">${step.eng} (예상 소요: ${step.time})</p>
                         <p>${step.desc}</p>
                         ${partsHtml}
+                        <div style="margin-top:10px;">
+                            <strong>👨‍🔧 표준 조립 작업 지침:</strong>
+                            ${instructionsHtml}
+                        </div>
+                        <div class="sim-step-progress-inline" id="inline-progress-${index}">
+                            <div class="sim-step-progress-fill" id="inline-progress-fill-${index}"></div>
+                        </div>
+                        <div style="margin-top:12px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap;">
+                            <div id="sim-status-message-${index}" style="font-size:0.85rem; font-weight:500; color:var(--ibex-accent);"></div>
+                            ${actionBtnHtml}
+                        </div>
                     </div>
                 `;
                 timeline.appendChild(item);
             });
         }
 
-        // Assembly simulation action
-        window.simulateAssembly = function(stepIndex) {
-            const step = processData[stepIndex];
-            if (!step.requiredParts || step.requiredParts.length === 0) return;
+        // Animated assembly simulation
+        window.startStepSimulation = function(stepIndex) {
+            const progressContainer = document.getElementById(`inline-progress-${stepIndex}`);
+            const progressFill = document.getElementById(`inline-progress-fill-${stepIndex}`);
+            const statusMsg = document.getElementById(`sim-status-message-${stepIndex}`);
+            const actionBtn = document.querySelector(`#timeline-content-${stepIndex} button`);
+            
+            if (!progressContainer || !progressFill || !statusMsg) return;
 
-            // Check stocks
-            let canAssemble = true;
-            let missingInfo = [];
+            progressContainer.style.display = 'block';
+            if (actionBtn) actionBtn.disabled = true;
 
-            step.requiredParts.forEach(p => {
-                const invItem = inventoryData.find(item => item.id === p.id);
-                if (!invItem || invItem.stock < p.qty) {
-                    canAssemble = false;
-                    missingInfo.push(`${p.name} (필요: ${p.qty}개 / 보유: ${invItem ? invItem.stock : 0}개)`);
+            const subTasks = stepInstructions[stepIndex] || ["조립 세부 공정 진행 중..."];
+            let progress = 0;
+            let currentSubIdx = 0;
+
+            const interval = setInterval(() => {
+                progress += 4;
+                progressFill.style.width = `${progress}%`;
+                
+                // Cycle status messages based on progress
+                if (progress < 30) {
+                    statusMsg.innerHTML = `<i class="fas fa-spinner fa-spin"></i> ${subTasks[0].substring(3, 20)}... 진행 중`;
+                } else if (progress < 70 && subTasks.length > 1) {
+                    statusMsg.innerHTML = `<i class="fas fa-spinner fa-spin"></i> ${subTasks[1].substring(3, 20)}... 설치 중`;
+                } else if (progress < 95 && subTasks.length > 2) {
+                    statusMsg.innerHTML = `<i class="fas fa-spinner fa-spin"></i> ${subTasks[2].substring(3, 20)}... 체결 및 검수 중`;
                 }
-            });
 
-            if (!canAssemble) {
-                alert(`조립 실습 실패!\n자재가 부족합니다:\n- ${missingInfo.join('\n- ')}`);
-                return;
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    statusMsg.innerHTML = `<span style="color:var(--status-green);"><i class="fas fa-check-circle"></i> 조립 완료!</span>`;
+                    
+                    setTimeout(() => {
+                        completeStep(stepIndex);
+                    }, 500);
+                }
+            }, 100);
+        };
+
+        function completeStep(stepIndex) {
+            currentSimStep = stepIndex + 1;
+            
+            // Update the Simulation Progress Dashboard
+            const percent = Math.round((currentSimStep / 7) * 100);
+            document.getElementById('sim-progress-bar').style.width = `${percent}%`;
+            document.getElementById('sim-progress-text').innerText = `${percent}%`;
+
+            // Update Module Badges
+            updateSimulationDashboardBadges();
+
+            // Re-render Timeline state
+            initProcess();
+
+            if (currentSimStep === 7) {
+                setTimeout(() => {
+                    alert("축하합니다! 🎉\nIBEX Light2 고압산소챔버의 모든 생산 조립 공정 시뮬레이션을 정상 완료하였습니다.\n신입 사원 기본 생산 교육 과정을 수료하셨습니다.");
+                    showResetSimulationOption();
+                }, 400);
+            }
+        }
+
+        function updateSimulationDashboardBadges() {
+            // Mapping step completion to module status badges
+            const badges = {
+                bottom_frame: document.getElementById('badge-bottom_frame'),
+                chamber: document.getElementById('badge-chamber'),
+                panels: document.getElementById('badge-panels'),
+                control_door: document.getElementById('badge-control_door')
+            };
+
+            // Reset classes
+            for (let key in badges) {
+                if (badges[key]) {
+                    badges[key].className = 'status-badge state-pending';
+                    badges[key].innerText = '조립 대기';
+                    badges[key].parentElement.classList.remove('active-step', 'completed-step');
+                }
             }
 
-            // Deduct stocks
-            step.requiredParts.forEach(p => {
-                const invItem = inventoryData.find(item => item.id === p.id);
-                invItem.stock -= p.qty;
-                invItem.lastUpdated = new Date().toISOString();
+            // Bottom Frame (Step 2 - index 1)
+            if (currentSimStep === 1) {
+                setCardState('bottom_frame', 'active', '조립 중');
+            } else if (currentSimStep > 1) {
+                setCardState('bottom_frame', 'completed', '조립 완료');
+            }
 
-                // Add log
-                transactionLogs.unshift({
-                    date: new Date().toISOString(),
-                    partId: invItem.id,
-                    partName: invItem.name,
-                    type: 'remove',
-                    qty: p.qty,
-                    remark: `생산 실습 (${step.title})`
-                });
-            });
+            // Chamber (Step 3 - index 2)
+            if (currentSimStep === 2) {
+                setCardState('chamber', 'active', '조립 중');
+            } else if (currentSimStep > 2) {
+                setCardState('chamber', 'completed', '조립 완료');
+            }
 
-            saveInventory();
-            
-            // Re-render UI elements
-            updateUIComponents();
-            
-            alert(`조립 실습 완료!\n"${step.title}" 단계 조립이 정상 처리되어 자재가 차감되었습니다.`);
+            // Panels (Step 4 - index 3)
+            if (currentSimStep === 3) {
+                setCardState('panels', 'active', '조립 중');
+            } else if (currentSimStep > 3) {
+                setCardState('panels', 'completed', '조립 완료');
+            }
+
+            // Control Door (Step 5 - index 4)
+            if (currentSimStep === 4) {
+                setCardState('control_door', 'active', '조립 중');
+            } else if (currentSimStep > 4) {
+                setCardState('control_door', 'completed', '조립 완료');
+            }
+        }
+
+        function setCardState(id, state, text) {
+            const badge = document.getElementById(`badge-${id}`);
+            const card = document.getElementById(`status-card-${id}`);
+            if (badge && card) {
+                badge.className = `status-badge state-${state}`;
+                badge.innerText = text;
+                card.className = `sim-status-card ${state}-step`;
+            }
+        }
+
+        function showResetSimulationOption() {
+            const timeline = document.getElementById('timeline');
+            const resetContainer = document.createElement('div');
+            resetContainer.style.textAlign = 'center';
+            resetContainer.style.padding = '30px';
+            resetContainer.innerHTML = `
+                <div style="background:var(--bg-card); border:1px solid var(--ibex-accent); border-radius:12px; padding:24px; max-width:500px; margin: 0 auto; box-shadow:var(--shadow-md);">
+                    <h3 style="color:var(--ibex-accent); margin-top:0;"><i class="fas fa-graduation-cap"></i> 교육 시뮬레이션 수료</h3>
+                    <p style="color:var(--text-secondary); font-size:0.9rem;">전 조립 단계를 성공적으로 학습했습니다. 새 교육생 실습을 위해 단계를 초기화할 수 있습니다.</p>
+                    <button class="btn-primary" style="margin-top:10px;" onclick="resetSimulation()">처음부터 다시 실습하기</button>
+                </div>
+            `;
+            timeline.appendChild(resetContainer);
+        }
+
+        window.resetSimulation = function() {
+            currentSimStep = 0;
+            document.getElementById('sim-progress-bar').style.width = '0%';
+            document.getElementById('sim-progress-text').innerText = '0%';
+            updateSimulationDashboardBadges();
+            initProcess();
         };
 
         function updateUIComponents() {
-            // Redraw everything so all stock counters match
             renderInventory();
             updateDashboard();
             renderLogs();
-            initProcess(); // Re-renders timeline stock text
             updateMainComponentsStockBadges();
         }
 
