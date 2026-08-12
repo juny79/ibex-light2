@@ -27,14 +27,14 @@
     <nav class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <h1>IBEX</h1>
-            <p style="color: var(--text-color); margin-top: 5px; font-size: 0.9rem;">Light2 Production</p>
+            <p style="color: #fff; margin-top: 5px; font-size: 0.9rem;">Light2 Production</p>
         </div>
         <ul class="nav-links">
             <li><a href="#overview" class="nav-link active"><i class="fas fa-home"></i> 제품 개요</a></li>
-            <li><a href="#components" class="nav-link"><i class="fas fa-cubes"></i> 구성 요소</a></li>
-            <li><a href="#process" class="nav-link"><i class="fas fa-cogs"></i> 생산 공정</a></li>
-            <li><a href="#inventory" class="nav-link"><i class="fas fa-boxes"></i> 재고 관리</a></li>
-            <li><a href="#specs" class="nav-link"><i class="fas fa-list-alt"></i> 제품 사양</a></li>
+            <li><a href="#components" class="nav-link"><i class="fas fa-cubes"></i> 자재 및 모듈 학습</a></li>
+            <li><a href="#process" class="nav-link"><i class="fas fa-cogs"></i> 생산 조립 공정</a></li>
+            <li><a href="#quiz-section" class="nav-link"><i class="fas fa-question-circle"></i> 이해도 평가</a></li>
+            <li><a href="#inventory" class="nav-link"><i class="fas fa-boxes"></i> 통합 재고 관리</a></li>
         </ul>
         <div class="sidebar-footer">
             &copy; 2026 (주)아이벡스메디칼시스템즈<br>All rights reserved.
@@ -117,8 +117,8 @@
 
         <!-- Components Section -->
         <section id="components">
-            <h2 class="section-title">주요 구성 요소</h2>
-            <p class="section-desc">IBEX Light2 생산을 위한 5가지 핵심 모듈입니다. 인터랙티브 뷰를 통해 각 부품의 역할과 사양을 확인하세요.</p>
+            <h2 class="section-title">자재 및 모듈 학습 (Materials & Modules)</h2>
+            <p class="section-desc">IBEX Light2 생산을 위한 5가지 핵심 모듈입니다. 실시간 자재 상태와 연동되어 있으며, 카드를 클릭하면 상세 사양 및 품질 체크포인트를 볼 수 있습니다.</p>
             
             <div class="exploded-view-container" title="Exploded View">
                 <!-- Exploded view image is set as background -->
@@ -141,16 +141,21 @@
 
         <!-- Process Section -->
         <section id="process">
-            <h2 class="section-title">생산 공정 (Production Process)</h2>
-            <p class="section-desc">완벽한 품질을 위한 7단계 조립 및 검수 공정입니다.</p>
+            <h2 class="section-title">생산 조립 공정 (Assembly Simulation)</h2>
+            <p class="section-desc">완벽한 품질을 위한 7단계 조립 및 검수 공정입니다. 각 단계별로 소요되는 실제 자재를 재고 시스템과 연동하여 조립 실습을 진행할 수 있습니다.</p>
             
             <div class="timeline" id="timeline">
                 <!-- Populated by JS -->
             </div>
+        </section>
 
+        <!-- Quiz Section -->
+        <section id="quiz-section">
+            <h2 class="section-title">생산 이해도 평가 (Knowledge Evaluation)</h2>
+            <p class="section-desc">신입 조립 작업자의 완벽한 공정 숙지를 위한 피드백 퀴즈입니다.</p>
             <!-- Quiz -->
-            <div class="quiz-container" id="quiz-container">
-                <h3 style="margin-top:0; color:var(--primary-color);"><i class="fas fa-question-circle"></i> 공정 이해도 체크</h3>
+            <div class="quiz-container" id="quiz-container" style="max-width: 800px; margin: 0 auto;">
+                <h3 style="margin-top:0; color:var(--ibex-accent);"><i class="fas fa-question-circle"></i> 공정 이해도 체크</h3>
                 <div id="quiz-content">
                     <!-- Populated by JS -->
                 </div>
@@ -160,8 +165,8 @@
 
         <!-- Inventory Section -->
         <section id="inventory">
-            <h2 class="section-title">재고 관리 (Inventory Management)</h2>
-            <p class="section-desc">실시간 부품 재고 현황을 모니터링하고 입출고 내역을 관리합니다.</p>
+            <h2 class="section-title">통합 재고 관리 (Integrated Inventory)</h2>
+            <p class="section-desc">실시간 부품 재고 현황을 모니터링하고 입출고 내역을 관리합니다. 생산 실습 진행 시 자재가 자동으로 차감됩니다.</p>
             
             <div class="dashboard-header">
                 <div class="dash-card">
@@ -169,12 +174,12 @@
                     <div class="stat-label">총 등록 부품 (Total Parts)</div>
                 </div>
                 <div class="dash-card">
-                    <div class="dash-value" style="color: var(--danger-color);" id="low-stock-alert">0</div>
+                    <div class="dash-value" style="color: var(--status-red);" id="low-stock-alert">0</div>
                     <div class="stat-label">재고 부족 경고 (Low Stock)</div>
                 </div>
                 <div class="dash-card">
-                    <div class="dash-value" style="color: var(--success-color);" id="total-stock">0</div>
-                    <div class="stat-label">전체 재고 수량 (Total Qty)</div>
+                    <div class="dash-value" style="color: var(--status-green);" id="total-stock">0</div>
+                    <div class="stat-label">전체 자재 수량 (Total Qty)</div>
                 </div>
             </div>
 
@@ -183,28 +188,28 @@
             </div>
 
             <div class="inventory-controls">
-                <h3 style="margin-top:0;">재고 입/출고 관리</h3>
+                <h3 style="margin-top:0;">수동 재고 조정</h3>
                 <form id="inventory-form">
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="part-select" style="display:block; margin-bottom:5px; color:#aaa;">부품 선택</label>
+                            <label for="part-select" style="display:block; margin-bottom:5px; color:var(--text-secondary);">부품 선택</label>
                             <select id="part-select" class="form-control" required>
                                 <!-- Populated by JS -->
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="transaction-type" style="display:block; margin-bottom:5px; color:#aaa;">구분</label>
+                            <label for="transaction-type" style="display:block; margin-bottom:5px; color:var(--text-secondary);">구분</label>
                             <select id="transaction-type" class="form-control" required>
                                 <option value="add">입고 (+)</option>
                                 <option value="remove">출고 (-)</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="quantity" style="display:block; margin-bottom:5px; color:#aaa;">수량</label>
+                            <label for="quantity" style="display:block; margin-bottom:5px; color:var(--text-secondary);">수량</label>
                             <input type="number" id="quantity" class="form-control" min="1" required>
                         </div>
-                        <div class="form-group">
-                            <button type="submit" class="btn-action">적용하기</button>
+                        <div class="form-group" style="display: flex; align-items: flex-end;">
+                            <button type="submit" class="btn-action" style="margin-top: 0; width: 100%;">적용하기</button>
                         </div>
                     </div>
                 </form>
@@ -212,7 +217,7 @@
 
             <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 40px; margin-bottom: 20px;">
                 <h3 style="margin:0;">최근 입출고 내역</h3>
-                <button id="export-csv" class="btn-action" style="background-color: var(--secondary-color); color: #fff; border: 1px solid #444;"><i class="fas fa-download"></i> CSV 다운로드</button>
+                <button id="export-csv" class="btn-action" style="margin-top:0; background: transparent; color: var(--ibex-accent); border: 1px solid var(--ibex-accent);"><i class="fas fa-download"></i> CSV 다운로드</button>
             </div>
             
             <div style="overflow-x: auto;">
@@ -231,47 +236,38 @@
                     </tbody>
                 </table>
             </div>
-        </section>
 
-        <!-- Specs Section -->
-        <section id="specs">
-            <h2 class="section-title">제품 사양 (Specifications)</h2>
-            <table class="specs-table">
-                <tbody>
-                    <tr>
-                        <th>제품명</th>
-                        <td>IBEX Light2</td>
-                    </tr>
-                    <tr>
-                        <th>유형</th>
-                        <td>1인용 고압산소챔버 (Monoplace Hyperbaric Oxygen Chamber)</td>
-                    </tr>
-                    <tr>
-                        <th>운영 압력</th>
-                        <td>최대 2 ATA</td>
-                    </tr>
-                    <tr>
-                        <th>무게</th>
-                        <td>약 250 kg (경량화 설계)</td>
-                    </tr>
-                    <tr>
-                        <th>크기 (W x L x H)</th>
-                        <td>800 mm x 2130 mm x 1190 mm</td>
-                    </tr>
-                    <tr>
-                        <th>안전 기능</th>
-                        <td>2분 이내 비상 배기 시스템, 압력 릴리프 밸브, 비상 정지</td>
-                    </tr>
-                    <tr>
-                        <th>주요 특징</th>
-                        <td>반투명 슬라이딩 도어, 직관적 컨트롤 패널, 고순도 산소 전달</td>
-                    </tr>
-                    <tr>
-                        <th>제조사</th>
-                        <td>(주)아이벡스메디칼시스템즈</td>
-                    </tr>
-                </tbody>
-            </table>
+            <div style="margin-top: 60px;">
+                <h3 style="margin-bottom: 15px;">IBEX Light2 제품 사양 (Specifications)</h3>
+                <table class="specs-table">
+                    <tbody>
+                        <tr>
+                            <th>제품명</th>
+                            <td>IBEX Light2</td>
+                            <th>유형</th>
+                            <td>1인용 고압산소챔버 (Monoplace Hyperbaric Oxygen Chamber)</td>
+                        </tr>
+                        <tr>
+                            <th>운영 압력</th>
+                            <td>최대 2 ATA</td>
+                            <th>무게</th>
+                            <td>약 250 kg (경량화 설계)</td>
+                        </tr>
+                        <tr>
+                            <th>크기 (W x L x H)</th>
+                            <td>800 mm x 2130 mm x 1190 mm</td>
+                            <th>안전 기능</th>
+                            <td>2분 이내 비상 배기 시스템, 압력 릴리프 밸브, 비상 정지</td>
+                        </tr>
+                        <tr>
+                            <th>주요 특징</th>
+                            <td>반투명 슬라이딩 도어, 직관적 컨트롤 패널, 고순도 산소 전달</td>
+                            <th>제조사</th>
+                            <td>(주)아이벡스메디칼시스템즈</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </section>
 
     </main>
@@ -327,13 +323,13 @@
         ];
 
         const processData = [
-            { title: '자재 검수', eng: 'Material Inspection', desc: '입고된 부품 및 원자재의 품질 검사', time: '2h', icon: 'fa-clipboard-check' },
-            { title: '하단 프레임 조립', eng: 'Bottom Frame Assembly', desc: '베이스 프레임 용접 및 표면 처리', time: '4h', icon: 'fa-wrench' },
-            { title: '챔버 본체 장착', eng: 'Chamber Body Mounting', desc: '아크릴 챔버를 프레임에 고정', time: '3h', icon: 'fa-compress-arrows-alt' },
-            { title: '앞/뒷기판 결합', eng: 'Front/Back Panel Integration', desc: '기판 장착 및 기밀 테스트', time: '5h', icon: 'fa-plug' },
-            { title: '컨트롤도어 설치', eng: 'Control Door Installation', desc: '슬라이딩 도어 및 제어 패널 설치', time: '2h', icon: 'fa-door-open' },
-            { title: '배관/전장 연결', eng: 'Piping & Electrical Connection', desc: '산소 배관, 전기 배선 연결', time: '6h', icon: 'fa-bolt' },
-            { title: '최종 검사 및 테스트', eng: 'Final Inspection & Testing', desc: '가압 테스트, 안전 검사, 품질 인증', time: '8h', icon: 'fa-check-circle' }
+            { title: '자재 검수', eng: 'Material Inspection', desc: '입고된 부품 및 원자재의 품질 검사', time: '2h', icon: 'fa-clipboard-check', requiredParts: [] },
+            { title: '하단 프레임 조립', eng: 'Bottom Frame Assembly', desc: '베이스 프레임 정렬 및 캐스터/레벨링 풋 체결', time: '4h', icon: 'fa-wrench', requiredParts: [{ id: 'bottom_frame', name: '하단 프레임', qty: 1 }] },
+            { title: '챔버 본체 장착', eng: 'Chamber Body Mounting', desc: '아크릴 챔버를 하단 프레임 지그에 맞춰 안착 및 고정', time: '3h', icon: 'fa-compress-arrows-alt', requiredParts: [{ id: 'chamber', name: '챔버', qty: 1 }] },
+            { title: '앞/뒷기판 결합', eng: 'Front/Back Panel Integration', desc: '앞기판(로고면) 및 배관/밸브가 장착된 뒷기판 결합', time: '5h', icon: 'fa-plug', requiredParts: [{ id: 'front_panel', name: '앞기판', qty: 1 }, { id: 'back_panel', name: '뒷기판', qty: 1 }] },
+            { title: '컨트롤도어 설치', eng: 'Control Door Installation', desc: '상부 터치패널, 모니터 암, 인터폰 및 도어 모듈 장착', time: '2h', icon: 'fa-door-open', requiredParts: [{ id: 'control_door', name: '컨트롤도어', qty: 1 }] },
+            { title: '배관/전장 연결', eng: 'Piping & Electrical Connection', desc: '산소 유량 배관 및 모니터/터치패널 전선 인터페이스 통합', time: '6h', icon: 'fa-bolt', requiredParts: [] },
+            { title: '최종 검사 및 테스트', eng: 'Final Inspection & Testing', desc: '가압(2 ATA) 리크 테스트 및 모니터/인터폰 작동 최종 검사', time: '8h', icon: 'fa-check-circle', requiredParts: [] }
         ];
 
         const quizQuestions = [
@@ -403,9 +399,21 @@
             });
         }
 
+        // Helper to get component stock info
+        function getComponentStockHtml(id) {
+            const item = inventoryData.find(i => i.id === id);
+            if (!item) return `<span class="stock-badge badge-error">N/A</span>`;
+            const status = getStatusInfo(item.stock, item.minStock);
+            let badgeClass = 'badge-success';
+            if (status.class === 'status-yellow') badgeClass = 'badge-warning';
+            if (status.class === 'status-red') badgeClass = 'badge-error';
+            return `<span class="stock-badge ${badgeClass}" id="stock-badge-${id}">실시간 재고: ${item.stock}개 (${status.text})</span>`;
+        }
+
         // 2. Components Section
         function initComponents() {
             const grid = document.getElementById('components-grid');
+            grid.innerHTML = ''; // Clear prior if any
             const modal = document.getElementById('component-modal');
             const modalClose = document.getElementById('modal-close');
             const modalBody = document.getElementById('modal-body');
@@ -413,6 +421,7 @@
             componentsData.forEach(comp => {
                 const card = document.createElement('div');
                 card.className = 'component-card';
+                card.setAttribute('data-comp-id', comp.id);
                 card.innerHTML = `
                     <div class="component-img-container">
                         <img src="${comp.img}" alt="${comp.name}" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'100\\' height=\\'100\\'><rect width=\\'100\\' height=\\'100\\' fill=\\'%23333\\'/><text x=\\'50\\' y=\\'50\\' fill=\\'%23fff\\' font-family=\\'sans-serif\\' font-size=\\'14\\' text-anchor=\\'middle\\' alignment-baseline=\\'middle\\'>Image</text></svg>'">
@@ -420,10 +429,14 @@
                     <div class="component-info">
                         <h3 class="component-title">${comp.name}</h3>
                         <p class="component-desc">${comp.desc}</p>
+                        <div style="margin-top:12px;" class="comp-stock-container" data-id="${comp.id}">
+                            ${getComponentStockHtml(comp.id)}
+                        </div>
                     </div>
                 `;
                 
                 card.addEventListener('click', () => {
+                    const currentStockHtml = getComponentStockHtml(comp.id);
                     modalBody.innerHTML = `
                         <div class="modal-img">
                             <img src="${comp.img}" alt="${comp.name}" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'100\\' height=\\'100\\'><rect width=\\'100\\' height=\\'100\\' fill=\\'%23333\\'/><text x=\\'50\\' y=\\'50\\' fill=\\'%23fff\\' font-family=\\'sans-serif\\' font-size=\\'14\\' text-anchor=\\'middle\\' alignment-baseline=\\'middle\\'>Image</text></svg>'">
@@ -431,12 +444,15 @@
                         <div class="modal-text">
                             <h2 class="modal-title">${comp.name}</h2>
                             <p>${comp.desc}</p>
-                            <hr style="border-color: var(--secondary-color); margin: 20px 0;">
-                            <h4 style="color:var(--primary-color);">자재 사양 (Material Specs)</h4>
+                            <div style="margin: 15px 0;">
+                                <strong>자재 상태:</strong> ${currentStockHtml}
+                            </div>
+                            <hr style="border-color: var(--border-default); margin: 20px 0;">
+                            <h4 style="color:var(--ibex-accent);">자재 사양 (Material Specs)</h4>
                             <p>${comp.specs}</p>
-                            <h4 style="color:var(--primary-color);">품질 체크포인트 (Quality Checkpoints)</h4>
+                            <h4 style="color:var(--ibex-accent); margin-top: 15px;">품질 체크포인트 (Quality Checkpoints)</h4>
                             <p>${comp.checkpoints}</p>
-                            <h4 style="color:var(--primary-color);">조립 주의사항 (Assembly Precautions)</h4>
+                            <h4 style="color:var(--ibex-accent); margin-top: 15px;">조립 주의사항 (Assembly Precautions)</h4>
                             <p>${comp.precautions}</p>
                         </div>
                     `;
@@ -456,17 +472,100 @@
         // 3. Process Section
         function initProcess() {
             const timeline = document.getElementById('timeline');
+            timeline.innerHTML = ''; // Clear prior if any
             processData.forEach((step, index) => {
                 const item = document.createElement('div');
                 item.className = 'timeline-item';
+                
+                let partsHtml = '';
+                if (step.requiredParts && step.requiredParts.length > 0) {
+                    partsHtml = `<div class="required-materials-box">
+                        <strong>🛠️ 필요 소요 자재:</strong><br>
+                        ${step.requiredParts.map(p => {
+                            const currentItem = inventoryData.find(inv => inv.id === p.id);
+                            const currentStock = currentItem ? currentItem.stock : 0;
+                            const isEnough = currentStock >= p.qty;
+                            const stockStatusText = isEnough ? `(보유: ${currentStock}개)` : `(<span style="color:var(--status-red); font-weight:bold;">재고부족: ${currentStock}개</span>)`;
+                            return `- ${p.name} ${p.qty}개 ${stockStatusText}`;
+                        }).join('<br>')}
+                        <button class="btn-action" style="margin-top:10px; font-size:0.85rem; padding: 6px 14px;" onclick="simulateAssembly(${index})">조립 실습 실행 (자재 차감)</button>
+                    </div>`;
+                }
+
                 item.innerHTML = `
                     <div class="timeline-content">
                         <h3><i class="fas ${step.icon}"></i> ${index + 1}. ${step.title}</h3>
-                        <p style="color: #aaa; margin-bottom: 5px; font-size: 0.9rem;">${step.eng} (예상 소요: ${step.time})</p>
+                        <p style="color: var(--text-muted); margin-bottom: 5px; font-size: 0.9rem;">${step.eng} (예상 소요: ${step.time})</p>
                         <p>${step.desc}</p>
+                        ${partsHtml}
                     </div>
                 `;
                 timeline.appendChild(item);
+            });
+        }
+
+        // Assembly simulation action
+        window.simulateAssembly = function(stepIndex) {
+            const step = processData[stepIndex];
+            if (!step.requiredParts || step.requiredParts.length === 0) return;
+
+            // Check stocks
+            let canAssemble = true;
+            let missingInfo = [];
+
+            step.requiredParts.forEach(p => {
+                const invItem = inventoryData.find(item => item.id === p.id);
+                if (!invItem || invItem.stock < p.qty) {
+                    canAssemble = false;
+                    missingInfo.push(`${p.name} (필요: ${p.qty}개 / 보유: ${invItem ? invItem.stock : 0}개)`);
+                }
+            });
+
+            if (!canAssemble) {
+                alert(`조립 실습 실패!\n자재가 부족합니다:\n- ${missingInfo.join('\n- ')}`);
+                return;
+            }
+
+            // Deduct stocks
+            step.requiredParts.forEach(p => {
+                const invItem = inventoryData.find(item => item.id === p.id);
+                invItem.stock -= p.qty;
+                invItem.lastUpdated = new Date().toISOString();
+
+                // Add log
+                transactionLogs.unshift({
+                    date: new Date().toISOString(),
+                    partId: invItem.id,
+                    partName: invItem.name,
+                    type: 'remove',
+                    qty: p.qty,
+                    remark: `생산 실습 (${step.title})`
+                });
+            });
+
+            saveInventory();
+            
+            // Re-render UI elements
+            updateUIComponents();
+            
+            alert(`조립 실습 완료!\n"${step.title}" 단계 조립이 정상 처리되어 자재가 차감되었습니다.`);
+        };
+
+        function updateUIComponents() {
+            // Redraw everything so all stock counters match
+            renderInventory();
+            updateDashboard();
+            renderLogs();
+            initProcess(); // Re-renders timeline stock text
+            updateMainComponentsStockBadges();
+        }
+
+        function updateMainComponentsStockBadges() {
+            componentsData.forEach(comp => {
+                const container = document.querySelector(`.comp-stock-container[data-id="${comp.id}"]`);
+                if (container) {
+                    container.innerHTML = getComponentStockHtml(comp.id);
+                }
             });
         }
 
@@ -566,10 +665,8 @@
                 transactionLogs = JSON.parse(storedLogs);
             }
 
-            renderInventory();
             populateSelect();
-            updateDashboard();
-            renderLogs();
+            updateUIComponents();
 
             // Form Submit
             document.getElementById('inventory-form').addEventListener('submit', (e) => {
@@ -622,12 +719,12 @@
                 card.className = 'inventory-item';
                 card.innerHTML = `
                     <img src="${item.img}" alt="${item.name}" onerror="this.style.display='none'">
-                    <h4 style="margin:0 0 10px 0; font-size:1.1rem; color:#fff;">${item.name}</h4>
+                    <h4 style="margin:0 0 10px 0; font-size:1.1rem; color:var(--text-primary);">${item.name}</h4>
                     <div class="stock-level">
                         <span class="status-dot ${status.class}"></span>
                         <span class="counter" data-target="${item.stock}">${item.stock}</span> 개
                     </div>
-                    <div style="font-size:0.8rem; color:#aaa; margin-top:10px;">
+                    <div style="font-size:0.8rem; color:var(--text-muted); margin-top:10px;">
                         기준치: Min ${item.minStock} / Max ${item.maxStock}<br>
                         최근 업데이트: ${dateStr}
                     </div>
@@ -682,16 +779,14 @@
                 partName: item.name,
                 type: type,
                 qty: qty,
-                remark: type === 'add' ? '입고 처리' : '생산 출고'
+                remark: type === 'add' ? '입고 처리' : '수동 출고'
             });
 
             // Keep only last 50 logs
             if (transactionLogs.length > 50) transactionLogs.pop();
 
             saveInventory();
-            renderInventory();
-            updateDashboard();
-            renderLogs();
+            updateUIComponents();
         }
 
         function renderLogs() {

@@ -1456,6 +1456,44 @@ tbody tr:last-child td {
     animation: fadeInUp 0.8s ease-out 0.4s both;
 }
 
+/* ── Required Materials Box in Timeline ── */
+.required-materials-box {
+    margin-top: 15px;
+    padding: 14px 18px;
+    background: rgba(30, 144, 255, 0.04);
+    border: 1px dashed rgba(30, 144, 255, 0.2);
+    border-radius: 10px;
+    font-size: 0.88rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+}
+
+.stock-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 50px;
+    font-size: 0.78rem;
+    font-weight: 600;
+}
+
+.badge-success {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--status-green);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.badge-warning {
+    background: rgba(245, 158, 11, 0.1);
+    color: var(--status-yellow);
+    border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.badge-error {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--status-red);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
 /* ── Responsive Design ── */
 @media (max-width: 1200px) {
     .components-grid {
