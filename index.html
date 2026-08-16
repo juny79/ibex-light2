@@ -15,7 +15,32 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Styles -->
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=20260816-v3">
+    <style>
+        /* Force sidebar link contrast directly in HTML head to prevent caching issues */
+        .nav-links li a {
+            color: #a0aec0 !important;
+        }
+        .nav-links li a i {
+            color: #a0aec0 !important;
+        }
+        .nav-links li a:hover {
+            color: #ffffff !important;
+            background: rgba(255, 255, 255, 0.08) !important;
+            border-left-color: rgba(30, 144, 255, 0.6) !important;
+        }
+        .nav-links li a:hover i {
+            color: #ffffff !important;
+        }
+        .nav-links li a.active {
+            color: #ffffff !important;
+            background: linear-gradient(90deg, rgba(30, 144, 255, 0.15) 0%, transparent 100%) !important;
+            border-left-color: var(--ibex-cyan) !important;
+        }
+        .nav-links li a.active i {
+            color: #ffffff !important;
+        }
+    </style>
 </head>
 <body>
 
@@ -669,17 +694,12 @@
             const completedCount = chaptersCompleted.size;
             const percent = Math.round((completedCount / total) * 100);
             
-            document.getElementById('academy-progress-bar').style.style = `width: ${percent}%;`; // Wait, actually style.width is safer:
             document.getElementById('academy-progress-bar').style.width = `${percent}%`;
             document.getElementById('academy-progress-text').innerText = `진도: ${completedCount} / ${total} (${percent}%)`;
 
-            // If completed all chapters, unlock certificate
+            // If completed all chapters, unlock certificate button only (no auto-popup)
             if (completedCount === total) {
                 document.getElementById('btn-show-certificate').style.display = 'inline-block';
-                // Trigger certificate popup automatically on 100% completion
-                setTimeout(() => {
-                    openCertificate();
-                }, 800);
             }
         }
 
