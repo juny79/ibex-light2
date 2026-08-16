@@ -31,6 +31,7 @@
         </div>
         <ul class="nav-links">
             <li><a href="#overview" class="nav-link active"><i class="fas fa-home"></i> 제품 개요</a></li>
+            <li><a href="#video-academy" class="nav-link"><i class="fas fa-video"></i> 비디오 교육 센터</a></li>
             <li><a href="#components" class="nav-link"><i class="fas fa-cubes"></i> 자재 및 모듈 학습</a></li>
             <li><a href="#process" class="nav-link"><i class="fas fa-cogs"></i> 생산 조립 공정</a></li>
             <li><a href="#quiz-section" class="nav-link"><i class="fas fa-question-circle"></i> 이해도 평가</a></li>
@@ -94,8 +95,8 @@
                         </div>
                     </div>
                     <div class="hero-cta-group">
-                        <a href="#components" class="btn-hero-primary" onclick="event.preventDefault(); document.getElementById('main-content').scrollTo({top: document.getElementById('components').offsetTop - 20, behavior: 'smooth'});">
-                            <i class="fas fa-cubes"></i> 구성 요소 학습하기
+                        <a href="#video-academy" class="btn-hero-primary" onclick="event.preventDefault(); document.getElementById('main-content').scrollTo({top: document.getElementById('video-academy').offsetTop - 20, behavior: 'smooth'});">
+                            <i class="fas fa-play-circle"></i> 생산 조립 교육 시작하기
                         </a>
                         <a href="https://ibex.co.kr/kr/product/mono/ibex-light/" target="_blank" class="btn-hero-outline">
                             <i class="fas fa-external-link-alt"></i> 공식 사이트
@@ -112,6 +113,72 @@
                         Oxygen Improving Every Life
                     </div>
                 </div>
+            </div>
+        </section>
+
+        <!-- Video Academy Section -->
+        <section id="video-academy">
+            <h2 class="section-title">비디오 교육 센터 (Video Training Center)</h2>
+            <p class="section-desc">IBEX Light2 제품 조립 매뉴얼을 고화질 챕터별 동영상과 핵심 포인트 설명을 통해 학습합니다. 모든 영상 이수 시 수료증이 발급됩니다.</p>
+            
+            <div class="video-academy-section-header">
+                <div class="video-progress-info">
+                    <span class="video-progress-ring-text" id="academy-progress-text">진도: 0 / 7 (0%)</span>
+                    <div class="video-progress-bar-bg">
+                        <div class="video-progress-bar-fill" id="academy-progress-bar" style="width: 0%;"></div>
+                    </div>
+                </div>
+                <button class="btn-hero-primary" id="btn-show-certificate" style="display: none; margin-top:0; padding:10px 20px; font-size:0.85rem;" onclick="openCertificate()"><i class="fas fa-graduation-cap"></i> 수료증 확인</button>
+            </div>
+
+            <div class="video-academy-grid">
+                <!-- Custom Video Player -->
+                <div class="video-player-container">
+                    <div class="video-canvas-viewport" id="video-viewport">
+                        <img src="./images/hero_banner.png" alt="Video Frame" class="video-canvas-bg" id="video-canvas-bg" />
+                        <div class="video-canvas-overlay">
+                            <div class="video-overlay-header">
+                                <span class="video-overlay-title" id="video-overlay-title">1. 자재 검수 (Material Inspection)</span>
+                                <span class="video-watermark">IBEX ACADEMY</span>
+                            </div>
+                            <div class="video-overlay-center">
+                                <button class="video-play-center-btn" id="video-play-center-btn" onclick="togglePlay()"><i class="fas fa-play"></i></button>
+                            </div>
+                            <div class="video-overlay-footer-text" id="video-overlay-desc">
+                                대기 중... 재생 버튼을 눌러 조립 교육 비디오를 시청하세요.
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Controls Bar -->
+                    <div class="video-controls-bar">
+                        <div class="video-timeline-wrapper">
+                            <div class="video-timeline-slider" id="video-timeline-slider" onclick="seekVideo(event)">
+                                <div class="video-timeline-fill" id="video-timeline-fill" style="width: 0%;"></div>
+                            </div>
+                        </div>
+                        <div class="video-control-buttons">
+                            <div class="video-control-left">
+                                <button class="video-btn" onclick="togglePlay()" id="btn-play-pause"><i class="fas fa-play"></i></button>
+                                <button class="video-btn" onclick="stopVideo()"><i class="fas fa-stop"></i></button>
+                                <span class="video-time-display" id="video-time-display">00:00 / 00:15</span>
+                            </div>
+                            <div class="video-control-right">
+                                <button class="video-btn" id="btn-mute" onclick="toggleMute()"><i class="fas fa-volume-up"></i></button>
+                                <button class="video-btn" onclick="requestFullscreenVideo()"><i class="fas fa-expand"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Video Chapters Sidebar -->
+                <div class="video-chapter-sidebar" id="video-chapter-sidebar">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+            <!-- SOP detail view linked to selected video step -->
+            <div class="instruction-manual-panel" id="instruction-manual-panel">
+                <!-- Populated by JS when chapter changes -->
             </div>
         </section>
 
@@ -379,11 +446,250 @@
         document.addEventListener('DOMContentLoaded', () => {
             initNavigation();
             initComponents();
+            initVideoAcademy();
             initProcess();
             initQuiz();
             initInventory();
             initScrollAnimations();
         });
+
+        // ── Video Academy Logic ──
+        const videoChaptersData = [
+            { id: 0, title: "1단계: 자재 품질 검수", duration: 15, img: "./images/exploded_view.jpg", desc: "조립 생산 전 입고 부품의 외관 스크래치, 미세 크랙 및 규격성 여부를 철저히 검수하고 기록표를 작성하는 필수 공정입니다." },
+            { id: 1, title: "2단계: 하단 프레임 조립", duration: 15, img: "./images/bottom_frame.jpg", desc: "베이스 스틸 골격에 전원 스위치 및 고하중 캐스터 바퀴를 견고히 체결하여 제품 기둥 지지대를 구축하고 프레임 수평을 정밀 교정합니다." },
+            { id: 2, title: "3단계: 아크릴 챔버 본체 안착", duration: 15, img: "./images/chamber_body.jpg", desc: "방진 고무 가이드 패드를 도포한 후, 최대 2 ATA 작동압을 견디는 실린더 형 투명 아크릴 챔버를 크레인으로 프레임 위에 안전하게 안착시킵니다." },
+            { id: 3, title: "4단계: 앞/뒷기판 정밀 결합", duration: 15, img: "./images/front_panel.jpg", desc: "전면 로고 캡과 밸브 배관이 내장된 후면 기판을 실린더 양 끝단에 결합하고, 완벽한 기밀 유지를 위해 고압용 실리콘 가스켓을 정밀 분사 도포합니다." },
+            { id: 4, title: "5단계: 컨트롤 도어 & 모니터 장착", duration: 15, img: "./images/control_door.png", desc: "슬라이딩 롤러 도어 가이드를 체결하고 상부 제어반 터치 패널과 환자용 대형 엔터테인먼트 모니터 및 통화용 핸드셋 거치를 완성합니다." },
+            { id: 5, title: "6단계: 산소 배관 및 전장 결선", duration: 15, img: "./images/back_panel.jpg", desc: "유량 조절 제어 밸브 및 구리 고압 호스들을 누출 없이 연결한 후 신호용 케이블 타이 작업을 진행하여 전선을 깔끔히 마감 처리합니다." },
+            { id: 6, title: "7단계: 2 ATA 가압 및 최종 리크 검사", duration: 15, img: "./images/hero_banner.png", desc: "조립 완성된 챔버 내부에 최대 2 ATA 가압을 실행하고 비눗물 및 전자 감지기로 가스 누출 여부를 판정하며 비상 정지 시 2분 내 감압 작동을 최종 검수합니다." }
+        ];
+
+        let activeChapterIdx = 0;
+        let isPlaying = false;
+        let currentTime = 0;
+        let chaptersCompleted = new Set();
+        let playInterval = null;
+        let isMuted = false;
+
+        function initVideoAcademy() {
+            renderChaptersList();
+            loadChapter(0);
+            updateAcademyProgress();
+            
+            // Set current date in certificate
+            const certDateEl = document.getElementById('cert-issue-date');
+            if (certDateEl) {
+                const today = new Date();
+                certDateEl.innerText = `${today.getFullYear()}년 ${String(today.getMonth() + 1).padStart(2, '0')}월 ${String(today.getDate()).padStart(2, '0')}일`;
+            }
+        }
+
+        function renderChaptersList() {
+            const sidebar = document.getElementById('video-chapter-sidebar');
+            sidebar.innerHTML = '<h3>교육 비디오 목차</h3>';
+            
+            videoChaptersData.forEach((ch, idx) => {
+                const isCompleted = chaptersCompleted.has(ch.id);
+                const isActive = idx === activeChapterIdx;
+                
+                const item = document.createElement('div');
+                item.className = `chapter-list-item ${isActive ? 'active-chapter' : ''} ${isCompleted ? 'completed-chapter' : ''}`;
+                item.setAttribute('onclick', `selectChapter(${idx})`);
+                
+                item.innerHTML = `
+                    <div class="chapter-number-badge">${isCompleted ? '<i class="fas fa-check"></i>' : idx + 1}</div>
+                    <div class="chapter-title-info">
+                        <div class="chapter-title-text">${ch.title}</div>
+                        <div class="chapter-meta-text">소요 시간: ${ch.duration}초</div>
+                    </div>
+                    <div class="chapter-status-icon">
+                        <i class="fas ${isCompleted ? 'fa-check-circle' : 'fa-play-circle'}"></i>
+                    </div>
+                `;
+                sidebar.appendChild(item);
+            });
+        }
+
+        window.selectChapter = function(idx) {
+            if (playInterval) clearInterval(playInterval);
+            isPlaying = false;
+            currentTime = 0;
+            activeChapterIdx = idx;
+            loadChapter(idx);
+            renderChaptersList();
+        };
+
+        function loadChapter(idx) {
+            const ch = videoChaptersData[idx];
+            document.getElementById('video-canvas-bg').src = ch.img;
+            document.getElementById('video-overlay-title').innerText = ch.title;
+            document.getElementById('video-overlay-desc').innerText = ch.desc;
+            document.getElementById('video-timeline-fill').style.width = '0%';
+            document.getElementById('video-time-display').innerText = `00:00 / 00:${ch.duration}`;
+            
+            const centerBtn = document.getElementById('video-play-center-btn');
+            centerBtn.className = 'video-play-center-btn';
+            centerBtn.innerHTML = '<i class="fas fa-play"></i>';
+            
+            const bottomBtn = document.getElementById('btn-play-pause');
+            bottomBtn.innerHTML = '<i class="fas fa-play"></i>';
+
+            // Sync with SOP Manual Panel below the video
+            const sopPanel = document.getElementById('instruction-manual-panel');
+            const matchingComponent = componentsData.find(c => c.id === getComponentIdByStep(idx));
+            
+            let manualHtml = `
+                <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid var(--ibex-accent); padding-bottom:12px; margin-bottom:20px;">
+                    <h3 style="margin:0; color:var(--ibex-navy);"><i class="fas fa-file-alt"></i> ${ch.title} - 표준 조립 지침서 (SOP)</h3>
+                    <span style="font-size:0.8rem; background:rgba(30,144,255,0.06); color:var(--ibex-accent); padding:4px 10px; border-radius:4px; font-weight:600;">아이벡스 기술제조부문</span>
+                </div>
+                <div style="display:grid; grid-template-columns:1fr 1.2fr; gap:30px;">
+                    <div>
+                        <h4 style="color:var(--ibex-navy); margin-top:0; font-size:0.95rem; border-left:3px solid var(--ibex-accent); padding-left:8px;">조립 단계 및 원리 안내</h4>
+                        <p style="font-size:0.9rem; line-height:1.7; color:var(--text-secondary);">${ch.desc}</p>
+                        ${matchingComponent ? `
+                            <div style="background:var(--bg-glass); border:1px solid var(--border-default); border-radius:10px; padding:15px; margin-top:20px;">
+                                <h5 style="margin:0 0 8px 0; color:var(--ibex-navy); font-size:0.88rem;"><i class="fas fa-info-circle"></i> 사용되는 공정 모듈 정보</h5>
+                                <strong style="font-size:0.85rem; color:var(--text-primary);">${matchingComponent.name}</strong>
+                                <p style="font-size:0.8rem; color:var(--text-muted); margin:4px 0 0 0;">${matchingComponent.desc}</p>
+                            </div>
+                        ` : ''}
+                    </div>
+                    <div>
+                        <h4 style="color:var(--ibex-navy); margin-top:0; font-size:0.95rem; border-left:3px solid var(--ibex-accent); padding-left:8px;">핵심 공정 수칙 & 검수 리스트</h4>
+                        <ul style="font-size:0.85rem; line-height:1.6; color:var(--text-secondary); padding-left:20px;">
+                            ${stepInstructions[idx] ? stepInstructions[idx].map(i => `<li style="margin-bottom:8px;">${i}</li>`).join('') : '<li>자재 검사 및 안전 점검 준수</li>'}
+                        </ul>
+                    </div>
+                </div>
+            `;
+            sopPanel.innerHTML = manualHtml;
+        }
+
+        // Helper map chapter to components
+        function getComponentIdByStep(stepIdx) {
+            if (stepIdx === 1) return 'bottom_frame';
+            if (stepIdx === 2) return 'chamber';
+            if (stepIdx === 3) return 'front_panel'; // Or back_panel
+            if (stepIdx === 4) return 'control_door';
+            return '';
+        }
+
+        window.togglePlay = function() {
+            const ch = videoChaptersData[activeChapterIdx];
+            const centerBtn = document.getElementById('video-play-center-btn');
+            const bottomBtn = document.getElementById('btn-play-pause');
+
+            if (isPlaying) {
+                // Pause
+                clearInterval(playInterval);
+                isPlaying = false;
+                centerBtn.className = 'video-play-center-btn';
+                centerBtn.innerHTML = '<i class="fas fa-play"></i>';
+                bottomBtn.innerHTML = '<i class="fas fa-play"></i>';
+            } else {
+                // Play
+                isPlaying = true;
+                centerBtn.className = 'video-play-center-btn playing';
+                bottomBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                
+                playInterval = setInterval(() => {
+                    currentTime += 0.5;
+                    const percent = (currentTime / ch.duration) * 100;
+                    document.getElementById('video-timeline-fill').style.width = `${percent}%`;
+                    
+                    // Format time
+                    const seconds = Math.floor(currentTime);
+                    document.getElementById('video-time-display').innerText = `00:${String(seconds).padStart(2, '0')} / 00:${ch.duration}`;
+                    
+                    if (currentTime >= ch.duration) {
+                        clearInterval(playInterval);
+                        isPlaying = false;
+                        currentTime = 0;
+                        chaptersCompleted.add(ch.id);
+                        
+                        centerBtn.className = 'video-play-center-btn';
+                        centerBtn.innerHTML = '<i class="fas fa-redo"></i>';
+                        bottomBtn.innerHTML = '<i class="fas fa-play"></i>';
+                        
+                        updateAcademyProgress();
+                        renderChaptersList();
+                        
+                        // Auto unlock and go to next chapter after completion
+                        if (activeChapterIdx < 6) {
+                            setTimeout(() => {
+                                selectChapter(activeChapterIdx + 1);
+                            }, 1000);
+                        }
+                    }
+                }, 500);
+            }
+        };
+
+        window.stopVideo = function() {
+            if (playInterval) clearInterval(playInterval);
+            isPlaying = false;
+            currentTime = 0;
+            loadChapter(activeChapterIdx);
+        };
+
+        window.toggleMute = function() {
+            const muteBtn = document.getElementById('btn-mute');
+            isMuted = !isMuted;
+            if (isMuted) {
+                muteBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+            } else {
+                muteBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+            }
+        };
+
+        window.seekVideo = function(event) {
+            const slider = document.getElementById('video-timeline-slider');
+            const rect = slider.getBoundingClientRect();
+            const clickX = event.clientX - rect.left;
+            const percent = clickX / rect.width;
+            
+            const ch = videoChaptersData[activeChapterIdx];
+            currentTime = percent * ch.duration;
+            document.getElementById('video-timeline-fill').style.width = `${percent * 100}%`;
+            document.getElementById('video-time-display').innerText = `00:${String(Math.floor(currentTime)).padStart(2, '0')} / 00:${ch.duration}`;
+        };
+
+        window.requestFullscreenVideo = function() {
+            const viewport = document.getElementById('video-viewport');
+            if (viewport.requestFullscreen) {
+                viewport.requestFullscreen();
+            } else if (viewport.webkitRequestFullscreen) {
+                viewport.webkitRequestFullscreen(); // Safari
+            }
+        };
+
+        function updateAcademyProgress() {
+            const total = videoChaptersData.length;
+            const completedCount = chaptersCompleted.size;
+            const percent = Math.round((completedCount / total) * 100);
+            
+            document.getElementById('academy-progress-bar').style.style = `width: ${percent}%;`; // Wait, actually style.width is safer:
+            document.getElementById('academy-progress-bar').style.width = `${percent}%`;
+            document.getElementById('academy-progress-text').innerText = `진도: ${completedCount} / ${total} (${percent}%)`;
+
+            // If completed all chapters, unlock certificate
+            if (completedCount === total) {
+                document.getElementById('btn-show-certificate').style.display = 'inline-block';
+                // Trigger certificate popup automatically on 100% completion
+                setTimeout(() => {
+                    openCertificate();
+                }, 800);
+            }
+        }
+
+        window.openCertificate = function() {
+            document.getElementById('certificate-modal-overlay').classList.add('active');
+        };
+
+        window.closeCertificate = function() {
+            document.getElementById('certificate-modal-overlay').classList.remove('active');
+        };
 
         // 1. Navigation & Mobile Menu
         function initNavigation() {
@@ -1039,5 +1345,33 @@
             document.body.removeChild(link);
         }
     </script>
+    <!-- Certificate Modal Overlay -->
+    <div class="certificate-modal-overlay" id="certificate-modal-overlay">
+        <div class="certificate-box">
+            <div class="certificate-seal"></div>
+            <div class="cert-header">
+                <h2>수 료 증</h2>
+                <p>CERTIFICATE OF COMPLETION</p>
+            </div>
+            <div class="cert-body">
+                <div class="cert-title">IBEX Light2 생산 조립 공정 교육</div>
+                <div class="cert-name" id="cert-student-name">신입 생산 엔지니어</div>
+                <div class="cert-text">
+                    위 사람은 (주)아이벡스메디칼시스템즈가 주관하는 'IBEX Light2 고압산소챔버'의 5대 주요 구성 모듈 검수 및 7단계 생산 조립 공정 시뮬레이션 교육 과정을 성실히 이수하였으므로 이 증서를 수여합니다.
+                </div>
+            </div>
+            <div class="cert-footer">
+                <div class="cert-date" id="cert-issue-date">2026년 08월 16일</div>
+                <div class="cert-sign">
+                    <strong>(주)아이벡스메디칼시스템즈</strong><br>
+                    대표이사 (인)
+                </div>
+            </div>
+            <div class="cert-buttons-row">
+                <button class="btn-cert-action btn-cert-print" onclick="window.print()"><i class="fas fa-print"></i> 인쇄하기</button>
+                <button class="btn-cert-action btn-cert-close" onclick="closeCertificate()">닫기</button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
