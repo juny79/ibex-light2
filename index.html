@@ -71,7 +71,7 @@
     <main class="main-content" id="main-content">
         
         <!-- Hero Section -->
-        <section id="overview">
+        <section id="overview" class="page-section active-page">
             <!-- Animated background particles -->
             <div class="hero-particles">
                 <div class="particle"></div>
@@ -120,7 +120,7 @@
                         </div>
                     </div>
                     <div class="hero-cta-group">
-                        <a href="#video-academy" class="btn-hero-primary" onclick="event.preventDefault(); document.getElementById('main-content').scrollTo({top: document.getElementById('video-academy').offsetTop - 20, behavior: 'smooth'});">
+                        <a href="#video-academy" class="btn-hero-primary" onclick="event.preventDefault(); switchPage('video-academy');">
                             <i class="fas fa-play-circle"></i> 생산 조립 교육 시작하기
                         </a>
                         <a href="https://ibex.co.kr/kr/product/mono/ibex-light/" target="_blank" class="btn-hero-outline">
@@ -142,7 +142,7 @@
         </section>
 
         <!-- Video Academy Section -->
-        <section id="video-academy">
+        <section id="video-academy" class="page-section">
             <h2 class="section-title">비디오 교육 센터 (Video Training Center)</h2>
             <p class="section-desc">IBEX Light2 제품 조립 매뉴얼을 고화질 챕터별 동영상과 핵심 포인트 설명을 통해 학습합니다. 모든 영상 이수 시 수료증이 발급됩니다.</p>
             
@@ -208,7 +208,7 @@
         </section>
 
         <!-- Components Section -->
-        <section id="components">
+        <section id="components" class="page-section">
             <h2 class="section-title">자재 및 모듈 학습 (Materials & Modules)</h2>
             <p class="section-desc">IBEX Light2 생산을 위한 5가지 핵심 모듈입니다. 실시간 자재 상태와 연동되어 있으며, 카드를 클릭하면 상세 사양 및 품질 체크포인트를 볼 수 있습니다.</p>
             
@@ -232,7 +232,7 @@
         </div>
 
         <!-- Process Section -->
-        <section id="process">
+        <section id="process" class="page-section">
             <h2 class="section-title">생산 조립 공정 & 시뮬레이션 (Assembly & Simulation)</h2>
             <p class="section-desc">IBEX Light2 제품이 어떻게 조립되고 완제품으로 빌드되는지 단계별 가상 조립 시뮬레이션으로 학습합니다.</p>
             
@@ -277,7 +277,7 @@
         </section>
 
         <!-- Quiz Section -->
-        <section id="quiz-section">
+        <section id="quiz-section" class="page-section">
             <h2 class="section-title">생산 이해도 평가 (Knowledge Evaluation)</h2>
             <p class="section-desc">신입 조립 작업자의 완벽한 공정 숙지를 위한 피드백 퀴즈입니다.</p>
             <!-- Quiz -->
@@ -291,7 +291,7 @@
         </section>
 
         <!-- Inventory Section -->
-        <section id="inventory">
+        <section id="inventory" class="page-section">
             <h2 class="section-title">통합 재고 관리 (Integrated Inventory)</h2>
             <p class="section-desc">실시간 부품 재고 현황을 모니터링하고 입출고 내역을 관리합니다. 생산 실습 진행 시 자재가 자동으로 차감됩니다.</p>
             
@@ -716,49 +716,49 @@
             const menuBtn = document.getElementById('mobile-menu-btn');
             const sidebar = document.getElementById('sidebar');
             const navLinks = document.querySelectorAll('.nav-link');
-            const mainContent = document.getElementById('main-content');
 
             menuBtn.addEventListener('click', () => {
                 sidebar.classList.toggle('active');
             });
 
-            // Smooth scroll to section within main-content
+            // Handle page switching
             navLinks.forEach(link => {
                 link.addEventListener('click', (e) => {
                     e.preventDefault();
                     const targetId = link.getAttribute('href').substring(1);
-                    const targetEl = document.getElementById(targetId);
-                    if (targetEl) {
-                        mainContent.scrollTo({
-                            top: targetEl.offsetTop,
-                            behavior: 'smooth'
-                        });
-                    }
+                    switchPage(targetId);
                     if (window.innerWidth <= 768) {
                         sidebar.classList.remove('active');
                     }
                 });
             });
-
-            // Update active nav based on scroll position in main-content
-            const sections = document.querySelectorAll('section');
-            mainContent.addEventListener('scroll', () => {
-                let current = '';
-                sections.forEach(section => {
-                    const sectionTop = section.offsetTop;
-                    const sectionHeight = section.clientHeight;
-                    if (mainContent.scrollTop >= (sectionTop - sectionHeight / 3)) {
-                        current = section.getAttribute('id');
-                    }
-                });
-                navLinks.forEach(link => {
-                    link.classList.remove('active');
-                    if (link.getAttribute('href').includes(current)) {
-                        link.classList.add('active');
-                    }
-                });
-            });
         }
+
+        window.switchPage = function(pageId) {
+            // Hide all pages
+            const pages = document.querySelectorAll('.page-section');
+            pages.forEach(page => {
+                page.classList.remove('active-page');
+            });
+
+            // Show active page
+            const activePage = document.getElementById(pageId);
+            if (activePage) {
+                activePage.classList.add('active-page');
+            }
+
+            // Sync navigation highlights
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${pageId}`) {
+                    link.classList.add('active');
+                }
+            });
+
+            // Scroll viewport back to top
+            document.getElementById('main-content').scrollTop = 0;
+        };
 
         // Helper to get component stock info
         function getComponentStockHtml(id) {
