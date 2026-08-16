@@ -181,7 +181,7 @@ body {
     align-items: center;
     gap: 12px;
     padding: 14px 28px;
-    color: var(--text-muted);
+    color: #a0aec0; /* Clear light grey for sidebar links */
     text-decoration: none;
     font-size: 0.92rem;
     font-weight: 500;
@@ -194,27 +194,28 @@ body {
     width: 20px;
     text-align: center;
     font-size: 1rem;
+    color: #a0aec0;
     transition: color var(--transition-fast);
 }
 
 .nav-links li a:hover {
-    color: var(--text-primary);
-    background: var(--bg-hover);
-    border-left-color: rgba(30, 144, 255, 0.4);
+    color: #ffffff; /* High contrast white on hover */
+    background: rgba(255, 255, 255, 0.08);
+    border-left-color: rgba(30, 144, 255, 0.6);
 }
 
 .nav-links li a:hover i {
-    color: var(--ibex-accent);
+    color: #ffffff;
 }
 
 .nav-links li a.active {
-    color: var(--text-primary);
-    background: linear-gradient(90deg, rgba(30, 144, 255, 0.12) 0%, transparent 100%);
+    color: #ffffff; /* High contrast white when active */
+    background: linear-gradient(90deg, rgba(30, 144, 255, 0.15) 0%, transparent 100%);
     border-left-color: var(--ibex-cyan);
 }
 
 .nav-links li a.active i {
-    color: var(--ibex-cyan);
+    color: #ffffff;
 }
 
 .nav-links li a.active::before {
