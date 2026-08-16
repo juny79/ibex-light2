@@ -281,12 +281,16 @@ section {
 
 /* ── Page Section Display Controls ── */
 .page-section {
-    display: none;
+    display: none !important;
     animation: fadeInPage 0.4s ease-out;
 }
 
 .page-section.active-page {
-    display: block;
+    display: block !important;
+}
+
+#overview.active-page {
+    display: flex !important;
 }
 
 @keyframes fadeInPage {
